@@ -46,17 +46,15 @@ def train_elasticnet_grid(X_train, y_train, l1_ratios, alphas):
             model = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, max_iter=5000, random_state=42)
             model.fit(X_train, y_train)
 
-            y_pred = model.predict(X_train)
-            r2 = r2_score(y_train, y_pred)
+            r2 = r2_score(y_train, model.predict(X_train))
 
-
-            
             results.append({
                 "l1_ratio": l1_ratio,
                 "alpha": alpha,
                 "r2_score": r2,
                 "model": model
             })
+
     return pd.DataFrame(results)
 
 
