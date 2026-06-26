@@ -133,7 +133,26 @@ def generate_auroc_curve(y_true, y_pred_proba, model_name="Model",
     # - Set labels: "False Positive Rate", "True Positive Rate"
     # - Save to output_path if provided
     # - Return figure and/or axes
-    pass
+    fpr, tpr, _ = roc_curve(y_true, y_pred_proba)
+    roc_auc = auc(fpr, tpr)
+
+    if ax is None:
+        fig, ax = plt.subplots()
+    else:
+        fig = ax.figure
+
+    ax.plot(fpr, tpr, label=f"{model_name} (AUC = {roc_auc:.3f})")
+    ax.plot([0, 1], [0, 1], linestyle="--")
+
+    ax.set_xlabel("False Positive Rate")
+    ax.set_ylabel("True Positive Rate")
+    ax.set_title("ROC Curve")
+    ax.legend()
+
+    if output_path:
+        plt.savefig(output_path, bbox_inches="tight")
+
+    return fig, ax
 
 
 def generate_auprc_curve(y_true, y_pred_proba, model_name="Model",

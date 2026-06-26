@@ -109,6 +109,10 @@ def prepare_regression_data(df, target='chol'):
     df = df.copy()
 
 
+    # ensure target exists
+    if target not in df.columns:
+        raise ValueError(f"{target} not in dataframe")
+
     # drop rows where target is missing
     df = df.dropna(subset=[target])
 
@@ -152,7 +156,7 @@ def prepare_classification_data(df, target='num'):
     y = df[target].apply(lambda x: 1 if x > 0 else 0)
 
     # remove target from features
-    x = df.dropna(columns=[target])
+    x = df.drop(columns=[target])
 
     # Remove chol from x if exists
     if 'chol' in x.columns:

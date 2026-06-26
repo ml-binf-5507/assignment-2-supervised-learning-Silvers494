@@ -169,7 +169,7 @@ def get_best_elasticnet_model(X_train, y_train, X_test, y_test,
 
         model = row["model"]
 
-        y_pred_test = model.predict(X_test),
+        y_pred_test = model.predict(X_test)
         test_r2 = r2_score(y_test, y_pred_test)
 
         if test_r2 > best_test_r2:
@@ -178,8 +178,8 @@ def get_best_elasticnet_model(X_train, y_train, X_test, y_test,
             best_l1 = row["l1_ratio"]
             best_alpha = row["alpha"]
 
-    y_pred = best_model.fit(X_train)
-    train_r2_score = model.predict(y_train, y_pred)     
+    y_pred_train = best_model.predict(X_train)
+    train_r2_score = r2_score(y_train, y_pred_train)     
 
     # Return dictionary
     optimal =  {
