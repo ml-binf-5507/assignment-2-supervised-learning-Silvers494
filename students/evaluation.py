@@ -218,9 +218,6 @@ def plot_comparison_curves(y_true, y_pred_proba_log, y_pred_proba_knn,
     # - Add legends with AUROC/AUPRC scores
     # - Save to output_path if provided
     # - Return figure
-    def plot_comparison_curves(y_true, y_pred_proba_log, y_pred_proba_knn,
-                          output_path=None):
-
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
     # Roc curves
