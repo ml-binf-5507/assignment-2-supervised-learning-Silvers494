@@ -10,8 +10,7 @@ from sklearn.preprocessing import StandardScaler
 
 def load_heart_disease_data(filepath):
     """
-    Load the heart disease dataset from CSV.
-    
+    Load the heart disease dataset from CSV.    
     Parameters
     ----------
     filepath : str
@@ -38,8 +37,16 @@ def load_heart_disease_data(filepath):
     # Hint: Use pd.read_csv()
     # Hint: Check if file exists and raise helpful error if not
     # TODO: Implement data loading
-    pass
 
+    filepath = "../data/heart_disease_uci.csv"
+    try:
+        df = pd.read_csv(filepath)
+    except FileNotFoundError:
+        raise FileNotFoundError(f"File wasn't found {filepath}")
+    except ValueError:
+        raise ValueError(f"This csv may be empty")
+    
+    return df
 
 def preprocess_data(df):
     """
@@ -59,7 +66,24 @@ def preprocess_data(df):
     # - Handle missing values
     # - Encode categorical variables (e.g., sex, cp, fbs, etc.)
     # - Ensure all columns are numeric
-    pass
+
+    # Replacing missing values with nan
+    df = df.replace(["NA", "N/A", "na", "NaN", ""], np.nan)
+
+    # dropping rows wiwth missing values
+    df = df.dropna()
+
+    # Identify categorical columns
+    cat_cols = df.select_dtypes(include=['object']).columns
+
+    # one hot code
+    df = pd.get_dummies(df, columns = cat_cols, drop_first=True)
+
+    # 
+    df = df.astype(float)
+
+    
+    return df
 
 
 def prepare_regression_data(df, target='chol'):
@@ -82,7 +106,22 @@ def prepare_regression_data(df, target='chol'):
     # - Remove rows with missing chol values
     # - Exclude chol from features
     # - Return X (features) and y (target)
-    pass
+    df = df.copy()
+
+
+    # drop rows where target is missing
+    df = df.dropna(subset=[target])
+
+    # separate target
+    y = df[target]
+
+    # separrate target from features
+    x = df.drop(columns=[target])
+
+    return x,y
+
+
+
 
 
 def prepare_classification_data(df, target='num'):
@@ -106,7 +145,20 @@ def prepare_classification_data(df, target='num'):
     # - Exclude target from features
     # - Exclude chol from features
     # - Return X (features) and y (target)
-    pass
+    
+    df = df.copy()
+
+    # binarize target 
+    y = df[target].apply(lambda x: 1 if x > 0 else 0)
+
+    # remove target from features
+    x = df.dropna(columns=[target])
+
+    # Remove chol from x if exists
+    if 'chol' in x.columns:
+        x = x.drop(columns=["chol"])
+
+    return x,y
 
 
 def split_and_scale(X, y, test_size=0.2, random_state=42):
@@ -135,4 +187,20 @@ def split_and_scale(X, y, test_size=0.2, random_state=42):
     # - Fit StandardScaler on training data only
     # - Transform both train and test data
     # - Return scaled data and scaler object
-    pass
+    
+    x_train, x_test, y_train, y_test = train_test_split(
+        X,y,
+        test_size=test_size,
+        random_state=random_state
+    )
+
+    # scalling
+    scaler = StandardScaler()
+
+    # fit on training data
+    x_train_scaled = scaler.fit_transform(x_train)
+
+    x_test_scaled = scaler.transform(x_test)
+
+    return x_train_scaled, x_test_scaled, y_train, y_test, scaler
+
