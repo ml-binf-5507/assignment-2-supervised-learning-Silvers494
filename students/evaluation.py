@@ -186,28 +186,29 @@ def generate_auprc_curve(y_true, y_pred_proba, model_name="Model",
     # - Set labels: "Recall", "Precision"
     # - Save to output_path if provided
     # - Return figure and/or axes
-    
-    fpr, tpr, _ = roc_curve(y_true, y_pred_proba)
-    roc_auc = auc(fpr, tpr)
 
+    precision, recall, _ = precision_recall_curve(y_true, y_pred_proba)
+    ap_score = average_precision_score(y_true, y_pred_proba)
+    baseline = float(np.mean(y_true))
+
+    
     if ax is None:
         fig, ax = plt.subplots()
     else:
         fig = ax.figure
 
-    ax.plot(fpr, tpr, label=f"{model_name} (AUC = {roc_auc:.3f})")
-    ax.plot([0, 1], [0, 1], linestyle="--")
+    ax.plot(recall, precision, label=f"{model_name} (AUC = {ap_score:.3f})")
+    ax.axhline(y=baseline, linestyle="--", label=f"Random Chance ({baseline:.2f})")
 
-    ax.set_xlabel("False Positive Rate")
-    ax.set_ylabel("True Positive Rate")
-    ax.set_title("ROC Curve")
+    ax.set_xlabel("Recall")
+    ax.set_ylabel("Precision")
+    ax.set_title("Precision-Recall Curve")
     ax.legend()
 
     if output_path:
         plt.savefig(output_path, bbox_inches="tight")
 
     return fig, ax
-
 
 def plot_comparison_curves(y_true, y_pred_proba_log, y_pred_proba_knn,
                           output_path=None):
