@@ -42,7 +42,13 @@ def train_logistic_regression_grid(X_train, y_train, param_grid=None):
     # - Use GridSearchCV with cv=5
     # - Fit on training data
     # - Return fitted GridSearchCV object
-    pass
+    model = LogisticRegression(max_iter=1000, random_state=42)
+
+    grid = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, scoring='roc_auc')
+
+    grid.fit(X_train,y_train)
+
+    return grid
 
 
 def train_knn_grid(X_train, y_train, param_grid=None):
@@ -78,8 +84,20 @@ def train_knn_grid(X_train, y_train, param_grid=None):
     # - Use GridSearchCV with cv=5
     # - Fit on training data
     # - Return fitted GridSearchCV object
-    pass
+    
+    # create Knn model
+    model = KNeighborsClassifier()
 
+    grid = GridSearchCV(
+        estimator=model,
+        param_grid=param_grid,
+        cv=5,
+        scoring='roc_auc'
+    )
+
+    grid.fit(X_train,y_train)
+
+    return grid
 
 def get_best_logistic_regression(X_train, y_train, X_test, y_test, param_grid=None):
     """
@@ -110,7 +128,24 @@ def get_best_logistic_regression(X_train, y_train, X_test, y_test, param_grid=No
     # - Use train_logistic_regression_grid
     # - Extract best model
     # - Return dictionary
-    pass
+    
+
+    # train using train_logistic_regression_grid
+    grid = train_logistic_regression_grid(X_train, y_train, param_grid)
+
+    # Best model
+    best_model = grid.best_estimator_
+
+    #
+    cv_results_df = pd.DataFrame(grid.cv_results_)
+
+    optimal = {
+        "model" : best_model,
+        "best_params" : grid.best_params_,
+        "cv_results_df" : cv_results_df
+    }
+
+    return optimal
 
 
 def get_best_knn(X_train, y_train, X_test, y_test, param_grid=None):
@@ -143,4 +178,25 @@ def get_best_knn(X_train, y_train, X_test, y_test, param_grid=None):
     # - Use train_knn_grid
     # - Extract best model and best_k
     # - Return dictionary
-    pass
+    
+
+    grid = train_knn_grid(X_train, y_train, param_grid)
+
+    # extracting best model
+    best_model = grid.best_estimator_
+
+    # best k value
+    best_k = grid.best_params_['n_neighbors']
+
+    # cv results as df
+    cv_results_df = pd.DataFrame(grid.cv_results_)
+
+    optimal = {
+        "model" : best_model,
+        "best_params" : grid.best_params_,
+        "best_k" : best_k,
+        "cv_results_df" : cv_results_df
+    }
+
+    return optimal
+
