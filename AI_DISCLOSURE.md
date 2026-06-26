@@ -30,17 +30,17 @@ _____ Yes     _____ No
 
 1. **What tools did you use?** (e.g., ChatGPT, Claude, GitHub Copilot)
    
-   _________________________________________________________________
+   ______________________________claude, chatgpt___________________________________
 
 2. **What specific things did you ask them to do?** (Be specific)
    
-   _________________________________________________________________
+   _______________________Debug the end, why my tests are failing, Mostly understanding many concepts from cross validation to alphas and l1_ratios, (my Head is tired fr!), I had major help in evaluation.py with the curves. __________________________________________
    
    _________________________________________________________________
 
 3. **How much of your final code came from AI vs. your own work?** (e.g., "AI gave me the formula, I wrote the loop" or "AI helped me debug an error")
    
-   _________________________________________________________________
+   __________________ i basically wrote the codes using previous examples from the classes, AI would help me debug and why I was wrong_______________________________________________
    
    _________________________________________________________________
 
@@ -48,13 +48,13 @@ _____ Yes     _____ No
    
    _____ Yes, I can explain it well
    
-   _____ Mostly, but I have some questions
+   ___Mostly, I'm getting there__ Mostly, but I have some questions
    
    _____ No, I'm not sure I understand it
 
 **Additional comments:**
 
-_________________________________________________________________
+_____________________tbh its a lot to take in, but i understand sometimes you must drown before you swim (i think that's how the saying goes, hope I don't die). ____________________________________________
 
 _________________________________________________________________
 
